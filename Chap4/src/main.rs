@@ -147,7 +147,29 @@ fn main() {
             let ui = imgui_context.frame();
             imgui::Window::new(imgui::im_str!("Information"))
                 .size([300.0, 200.0], imgui::Condition::FirstUseEver)
-                .build(&ui, || {});
+                .build(&ui, || {
+                    ui.text(imgui::im_str!("OpenGL TestAPPver 1.0"));
+                    ui.separator();
+                    ui.text(imgui::im_str!("FPS: {:.1}", ui.io().framerate));
+                    let display_size = ui.io().display_size;
+                    ui.text(format!(
+                        "Display Size: ({:.1},{:.1})",
+                        display_size[0], display_size[1]
+                    ));
+                    let mouse_pos = ui.io().mouse_pos;
+                    ui.text(format!(
+                        "Mouse Position: ({:.1}, {:.1})",
+                        mouse_pos[0], mouse_pos[1]
+                    ));
+                    imgui::ProgressBar::new(0.6)
+                        .size([200.0, 20.0])
+                        .overlay_text(imgui::im_str!("Progress!"))
+                        .build(&ui);
+                    let arr = [0.6f32, 0.1f32, 1.0f32, 0.5f32, 0.92f32, 0.1f32, 0.2f32];
+                    ui.plot_lines(imgui::im_str!("lines"), &arr)
+                        .graph_size([200.0, 40.0])
+                        .build();
+                });
 
             imgui_sdl2_context.prepare_render(&ui, &window);
             renderer.render(ui);
