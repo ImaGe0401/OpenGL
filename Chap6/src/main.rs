@@ -28,7 +28,7 @@ type Matrix4 = cgmath::Matrix4<f32>;
 
 const WINDOW_WIDTH: u32 = 900;
 const WINDOW_HEIGHT: u32 = 480;
-const FLOAT_NUM: usize = 3;
+const FLOAT_NUM: usize = 8;
 const VERTEX_NUM: usize = 36;
 const BUF_LEN: usize = FLOAT_NUM * VERTEX_NUM;
 
@@ -121,8 +121,8 @@ fn main() {
         (BUF_LEN * mem::size_of::<GLfloat>()) as GLsizeiptr,
         buffer_array.as_ptr() as *const c_void,
         gl::STATIC_DRAW,
-        vec![gl::FLOAT],
-        vec![FLOAT_NUM as i32],
+        vec![gl::FLOAT, gl::FLOAT, gl::FLOAT],
+        vec![3, 3, 2],
         FLOAT_NUM as i32 * mem::size_of::<GLfloat>() as GLsizei,
         VERTEX_NUM as i32,
     );
@@ -144,7 +144,7 @@ fn main() {
     let mut camera_x: f32 = 2.0f32;
     let mut camera_y: f32 = -2.0f32;
     let mut camera_z: f32 = 2.0f32; 
-    let mut alpha: f32 ~ 1.0f32;
+    let mut alpha: f32 = 1.0f32;
     let mut material_specular: Vector3 = Vector3 {
         x: 0.2,
         y: 0.2,
@@ -226,7 +226,7 @@ fn main() {
 
             // init matrix for model, view and projection
             let model_matrix = Matrix4::identity();
-            let view_matrix = Matrix4::look_at(
+            let view_matrix = Matrix4::look_at_rh(
                 Point3 {
                     x: camera_x,
                     y: camera_y,
